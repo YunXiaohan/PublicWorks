@@ -32,3 +32,5 @@ print("User Python Version: ", python_version)
 print("Update Time: ", spend_time)
 print("Packages Updated Complete")
 
+# for update pip
+# C:\Users\user\AppData\Local\Programs\Python\Python312\python.exe -m pip install --upgrade pip
