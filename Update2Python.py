@@ -1,3 +1,7 @@
+'''
+파이썬 패키지 업데이트를 수행하는 코드입니다.
+'''
+
 import subprocess
 import pkg_resources
 import time
