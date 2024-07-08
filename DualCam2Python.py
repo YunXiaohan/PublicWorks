@@ -58,11 +58,17 @@ class DualCameraApp:
         self.right_title_label = ttk.Label(self.right_frame, text="Mako Cam", style="Title.TLabel")
         self.right_title_label.pack(fill=tk.X, padx=10, pady=5)
 
-        self.left_info_label = ttk.Label(self.left_frame, text="Pixel Info: ", style="Info.TLabel")
-        self.left_info_label.pack(fill=tk.X, padx=10, pady=5)
+        self.left_info_label_click = ttk.Label(self.left_frame, text="Click Pixel Info: ", style="Info.TLabel")
+        self.left_info_label_click.pack(fill=tk.X, padx=10, pady=5)
 
-        self.right_info_label = ttk.Label(self.right_frame, text="Pixel Info: ", style="Info.TLabel")
-        self.right_info_label.pack(fill=tk.X, padx=10, pady=5)
+        self.left_info_label_move = ttk.Label(self.left_frame, text="Move Pixel Info: ", style="Info.TLabel")
+        self.left_info_label_move.pack(fill=tk.X, padx=10, pady=5)
+
+        self.right_info_label_click = ttk.Label(self.right_frame, text="Click Pixel Info: ", style="Info.TLabel")
+        self.right_info_label_click.pack(fill=tk.X, padx=10, pady=5)
+
+        self.right_info_label_move = ttk.Label(self.right_frame, text="Move Pixel Info: ", style="Info.TLabel")
+        self.right_info_label_move.pack(fill=tk.X, padx=10, pady=5)
 
         self.sdk = TLCameraSDK()
         self.thor_camera = None
@@ -75,6 +81,9 @@ class DualCameraApp:
         self.setup_thor_camera()
         self.setup_mako_camera()
         self.update_frames()
+
+        self.left_video_frame.bind("<Motion>", self.show_thor_intensity_real_time)
+        self.right_video_frame.bind("<Motion>", self.show_mako_intensity_real_time)
 
     def setup_thor_camera(self):
         camera_list = self.sdk.discover_available_cameras()
@@ -121,7 +130,7 @@ class DualCameraApp:
             y = int(event.y * self.thor_image.shape[0] / VGX_HEIGHT)
             if x < self.thor_image.shape[1] and y < self.thor_image.shape[0]:
                 intensity = self.thor_image[y, x]
-                self.left_info_label.config(text=f"Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
+                self.left_info_label_click.config(text=f"Click Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
 
     def show_mako_intensity(self, event):
         if self.raw_image is not None:
@@ -129,7 +138,23 @@ class DualCameraApp:
             y = int(event.y * self.raw_image.shape[0] / VGX_HEIGHT)
             if x < self.raw_image.shape[1] and y < self.raw_image.shape[0]:
                 intensity = self.raw_image[y, x].item()
-                self.right_info_label.config(text=f"Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
+                self.right_info_label_click.config(text=f"Click Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
+
+    def show_thor_intensity_real_time(self, event):
+        if self.thor_image is not None:
+            x = int(event.x * self.thor_image.shape[1] / VGX_WIDTH)
+            y = int(event.y * self.thor_image.shape[0] / VGX_HEIGHT)
+            if x < self.thor_image.shape[1] and y < self.thor_image.shape[0]:
+                intensity = self.thor_image[y, x]
+                self.left_info_label_move.config(text=f"Move Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
+
+    def show_mako_intensity_real_time(self, event):
+        if self.raw_image is not None:
+            x = int(event.x * self.raw_image.shape[1] / VGX_WIDTH)
+            y = int(event.y * self.raw_image.shape[0] / VGX_HEIGHT)
+            if x < self.raw_image.shape[1] and y < self.raw_image.shape[0]:
+                intensity = self.raw_image[y, x].item()
+                self.right_info_label_move.config(text=f"Move Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
 
     def mako_frame_callback(self, cam: Camera, frame: Frame):
         if frame.get_status() == FrameStatus.Complete:
