@@ -121,7 +121,7 @@ class DualCameraApp:
             y = int(event.y * self.thor_image.shape[0] / VGX_HEIGHT)
             if x < self.thor_image.shape[1] and y < self.thor_image.shape[0]:
                 intensity = self.thor_image[y, x]
-                self.left_info_label.config(text=f"ThorCam Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
+                self.left_info_label.config(text=f"Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
 
     def show_mako_intensity(self, event):
         if self.raw_image is not None:
@@ -129,7 +129,7 @@ class DualCameraApp:
             y = int(event.y * self.raw_image.shape[0] / VGX_HEIGHT)
             if x < self.raw_image.shape[1] and y < self.raw_image.shape[0]:
                 intensity = self.raw_image[y, x].item()
-                self.right_info_label.config(text=f"MAKO Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
+                self.right_info_label.config(text=f"Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
 
     def mako_frame_callback(self, cam: Camera, frame: Frame):
         if frame.get_status() == FrameStatus.Complete:
