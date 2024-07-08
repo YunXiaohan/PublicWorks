@@ -28,11 +28,14 @@ class DualCameraApp:
         self.root = root
         self.root.title("Dual Camera Viewer")
         self.root.geometry("1920x1080")
+        self.root.configure(background="#2e2e2e")
 
         style = ttk.Style()
-        style.configure("TFrame", background="#f0f0f0")
-        style.configure("TLabel", background="#f0f0f0", font=("Helvetica", 12))
-        style.configure("Info.TLabel", font=("Helvetica", 14, "bold"))
+        style.theme_use("clam")
+        style.configure("TFrame", background="#2e2e2e")
+        style.configure("TLabel", background="#2e2e2e", foreground="#ffffff", font=("Helvetica", 12))
+        style.configure("Info.TLabel", font=("Helvetica", 14, "bold"), foreground="#00ff00")
+        style.configure("Title.TLabel", font=("Helvetica", 16, "bold"), foreground="#ff9900")
 
         self.main_frame = ttk.Frame(self.root, padding="10 10 10 10")
         self.main_frame.pack(fill=tk.BOTH, expand=True)
@@ -49,10 +52,16 @@ class DualCameraApp:
         self.right_video_frame = ttk.Label(self.right_frame, relief="solid")
         self.right_video_frame.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
 
-        self.left_info_label = ttk.Label(self.left_frame, text="ThorCam Pixel Info: ", style="Info.TLabel")
+        self.left_title_label = ttk.Label(self.left_frame, text="Thor Cam", style="Title.TLabel")
+        self.left_title_label.pack(fill=tk.X, padx=10, pady=5)
+
+        self.right_title_label = ttk.Label(self.right_frame, text="Mako Cam", style="Title.TLabel")
+        self.right_title_label.pack(fill=tk.X, padx=10, pady=5)
+
+        self.left_info_label = ttk.Label(self.left_frame, text="Pixel Info: ", style="Info.TLabel")
         self.left_info_label.pack(fill=tk.X, padx=10, pady=5)
 
-        self.right_info_label = ttk.Label(self.right_frame, text="MAKO Pixel Info: ", style="Info.TLabel")
+        self.right_info_label = ttk.Label(self.right_frame, text="Pixel Info: ", style="Info.TLabel")
         self.right_info_label.pack(fill=tk.X, padx=10, pady=5)
 
         self.sdk = TLCameraSDK()
@@ -119,7 +128,7 @@ class DualCameraApp:
             x = int(event.x * self.raw_image.shape[1] / VGX_WIDTH)
             y = int(event.y * self.raw_image.shape[0] / VGX_HEIGHT)
             if x < self.raw_image.shape[1] and y < self.raw_image.shape[0]:
-                intensity = self.raw_image[y, x].item()  # .item()을 사용하여 값을 추출
+                intensity = self.raw_image[y, x].item()
                 self.right_info_label.config(text=f"MAKO Pixel Info: X: {x}, Y: {y}, Intensity: {intensity}")
 
     def mako_frame_callback(self, cam: Camera, frame: Frame):
