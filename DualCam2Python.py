@@ -29,7 +29,7 @@ class DualCameraApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Dual Camera Viewer")
-        self.root.geometry("1800x1200")
+        self.root.geometry("1750x1200")
         self.root.configure(background="#2e2e2e")
 
         style = ttk.Style()
